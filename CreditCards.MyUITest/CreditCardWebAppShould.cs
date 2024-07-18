@@ -1,7 +1,10 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Support.UI;
+using SeleniumExtras.WaitHelpers;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -200,5 +203,54 @@ namespace CreditCards.MyUITest
                 Assert.Equal(ApplyUrl, driver.Url);
             }
         }
+
+        [Fact]
+        public void WaitUntilButtonEasyNowShow()
+        {
+            using (IWebDriver driver = new ChromeDriver())
+            {
+                driver.Navigate().GoToUrl(HomeUrl);
+
+                var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(20));
+                var applyLink = wait.Until(d => d.FindElement(By.LinkText("Easy: Apply Now!")));
+                applyLink.Click();
+
+                Assert.Equal("Credit Card Application - Credit Cards", driver.Title);
+                Assert.Equal(ApplyUrl, driver.Url);
+            }
+        }
+
+        [Fact]
+        public void WaitUntilButtonEasyNowShow_ElementToBeClickable()
+        {
+            using (IWebDriver driver = new ChromeDriver())
+            {
+                driver.Navigate().GoToUrl(HomeUrl);
+
+                var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(11));
+                var applyLink = wait.Until(ExpectedConditions.ElementToBeClickable(By.LinkText("Easy: Apply Now!")));
+
+                applyLink.Click();
+
+                Assert.Equal("Credit Card Application - Credit Cards", driver.Title);
+                Assert.Equal(ApplyUrl, driver.Url);
+            }
+        }
+
+        [Fact]
+        public void DisplayProductsAndRates()
+        {
+            using (IWebDriver driver = new ChromeDriver())
+            {
+                driver.Navigate().GoToUrl(HomeUrl);
+
+                ReadOnlyCollection<IWebElement> productCells = driver.FindElements(By.TagName("td"));
+                Assert.Equal("Easy Credit Card", productCells[0].Text);
+                Assert.Equal("20% APR", productCells[1].Text);
+                Assert.Equal("Silver Credit Card", productCells[2].Text);
+            }
+        }
+
+
     }
 }
