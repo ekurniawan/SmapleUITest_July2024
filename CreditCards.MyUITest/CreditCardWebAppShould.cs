@@ -14,6 +14,7 @@ namespace CreditCards.MyUITest
         private const string HomeTitle = "Home Page - Credit Cards";
         private const string AboutTitle = "About - Credit Cards";
         private const string AboutUrl = "https://localhost:7014/Home/About";
+        private const string ApplyUrl = "https://localhost:7014/Apply";
 
         [Fact]
         public void LoadApplicationPage()
@@ -101,6 +102,44 @@ namespace CreditCards.MyUITest
                 string pageTitle = driver.Title;
                 Assert.Equal(HomeTitle, pageTitle);
                 Assert.Equal(HomeUrl, driver.Url);
+            }
+        }
+
+
+        // Test untuk menekan tombol Apply Now Low Rate
+        [Fact]
+        public void HomePage_TekanTombol_ApplyLowRate()
+        {
+            using (IWebDriver driver = new ChromeDriver())
+            {
+                driver.Navigate().GoToUrl(HomeUrl);
+                Helpers.Pause(1000);
+
+                IWebElement applyLowRateButton = driver.FindElement(By.Name("ApplyLowRate"));
+                applyLowRateButton.Click();
+
+                Helpers.Pause();
+
+                Assert.Equal("Credit Card Application - Credit Cards", driver.Title);
+                Assert.Equal(ApplyUrl, driver.Url);
+            }
+        }
+
+        [Fact]
+        public void HomePage_TekanTombol_EasyApplyNow()
+        {
+            using (IWebDriver driver = new ChromeDriver())
+            {
+                driver.Navigate().GoToUrl(HomeUrl);
+                Helpers.Pause(11000);
+
+                var elementApplyLink = driver.FindElement(By.LinkText("Easy: Apply Now!"));
+                elementApplyLink.Click();
+
+                Helpers.Pause();
+
+                Assert.Equal("Credit Card Application - Credit Cards", driver.Title);
+                Assert.Equal(ApplyUrl, driver.Url);
             }
         }
     }
