@@ -53,19 +53,27 @@ namespace CreditCards.MyUITest
             {
                 driver.Navigate().GoToUrl(HomeUrl);
 
-                Helpers.Pause(5000);
+                Helpers.Pause();
+
+                IWebElement tokenElement = driver.FindElement(By.Id("GenerationToken"));
+                string strToken = tokenElement.Text;
 
                 driver.Navigate().GoToUrl(AboutUrl);
 
-                Helpers.Pause(5000);
+                Helpers.Pause();
 
                 driver.Navigate().Back();
 
                 Helpers.Pause();
 
                 string pageTitle = driver.Title;
+
+                string reloadToken = driver.FindElement(By.Id("GenerationToken")).Text;
+
                 Assert.Equal(HomeTitle, pageTitle);
                 Assert.Equal(HomeUrl, driver.Url);
+
+                Assert.NotEqual(strToken, reloadToken);
             }
         }
 
@@ -95,7 +103,5 @@ namespace CreditCards.MyUITest
                 Assert.Equal(HomeUrl, driver.Url);
             }
         }
-
-
     }
 }
