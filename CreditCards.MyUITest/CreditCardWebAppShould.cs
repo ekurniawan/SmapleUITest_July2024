@@ -411,6 +411,52 @@ namespace CreditCards.MyUITest
             }
         }
 
+
+        [Theory]
+        [ExcelData(@"C:\Workshop\2024\Selenium UI\CreditCards\CreditCards.MyUITest\ApplyCredits.xlsx", "select * from [Sheet1$A1:I4]")]
+        public void Form_IsiTextBoxExcel(string FirstName, string LastName, string FrequentFlyerNumber, int Age, decimal GrossAnualIncome,
+   string Relationship, string BusinessSource, string TermAccepted, string Expected)
+        {
+            using (IWebDriver driver = new ChromeDriver(options))
+            {
+
+                driver.Navigate().GoToUrl(ApplyUrl);
+
+                driver.FindElement(By.Id("FirstName")).SendKeys(FirstName);
+                Helpers.Pause(1000);
+                driver.FindElement(By.Id("LastName")).SendKeys(LastName);
+                Helpers.Pause(1000);
+                driver.FindElement(By.Id("FrequentFlyerNumber")).SendKeys(FrequentFlyerNumber);
+                Helpers.Pause(1000);
+                driver.FindElement(By.Id("Age")).SendKeys(Age.ToString());
+                Helpers.Pause(1000);
+                driver.FindElement(By.Id("GrossAnnualIncome")).SendKeys(GrossAnualIncome.ToString());
+                Helpers.Pause(1000);
+                driver.FindElement(By.Id(Relationship)).Click();
+                Helpers.Pause(1000);
+                IWebElement businessSource = driver.FindElement(By.Id("BusinessSource"));
+                SelectElement businessSourceSelect = new SelectElement(businessSource);
+                businessSourceSelect.SelectByValue(BusinessSource);
+                Helpers.Pause(1000);
+                if (TermAccepted == "Yes")
+                    driver.FindElement(By.Id("TermsAccepted")).Click();
+
+                Helpers.Pause(1000);
+                driver.FindElement(By.CssSelector("input[type='submit']")).Click();
+                Helpers.Pause();
+
+                if (Expected.ToLower() == "true")
+                {
+                    Assert.Equal("Application Complete - Credit Cards", driver.Title);
+                }
+                else
+                {
+                    var validationSummary = driver.FindElement(By.CssSelector(".validation-summary-errors ul li"));
+                    Assert.Equal(Expected, validationSummary.Text);
+                }
+            }
+        }
+
         //dotnet test --logger "html;logfilename=testResult.html"
     }
 
