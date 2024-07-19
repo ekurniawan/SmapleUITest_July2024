@@ -1,10 +1,14 @@
-﻿using OpenQA.Selenium;
+﻿using CreditCards.MyUITest.Models;
+using CsvHelper;
+using FluentAssertions;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.WaitHelpers;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,11 +22,18 @@ namespace CreditCards.MyUITest
         private const string AboutTitle = "About - Credit Cards";
         private const string AboutUrl = "https://localhost:7014/Home/About";
         private const string ApplyUrl = "https://localhost:7014/Apply";
+        private ChromeOptions options;
+
+        public CreditCardWebAppShould()
+        {
+            options = new ChromeOptions();
+            options.AddArgument("--headless=new");
+        }
 
         [Fact]
         public void LoadApplicationPage()
         {
-            using (IWebDriver driver = new ChromeDriver())
+            using (IWebDriver driver = new ChromeDriver(options))
             {
                 driver.Navigate().GoToUrl(HomeUrl);
 
@@ -31,6 +42,8 @@ namespace CreditCards.MyUITest
                 string pageTitle = driver.Title;
                 Assert.Equal(HomeTitle, pageTitle);
                 Assert.Equal(HomeUrl, driver.Url);
+
+                driver.Quit();
             }
         }
 
@@ -251,6 +264,58 @@ namespace CreditCards.MyUITest
             }
         }
 
+
+        [Fact]
+        public void Form_IsiTextBox()
+        {
+            List<ApplyCredits> records = new List<ApplyCredits>();
+            using (var reader = new StreamReader(@"C:\Workshop\2024\Selenium UI\CreditCards\CreditCards.MyUITest\csv\ApplyCredits.csv"))
+            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+            {
+                records = csv.GetRecords<ApplyCredits>().ToList();
+            }
+
+            using (IWebDriver driver = new ChromeDriver())
+            {
+                foreach (var data in records)
+                {
+                    driver.Navigate().GoToUrl(ApplyUrl);
+
+                    driver.FindElement(By.Id("FirstName")).SendKeys(data.FirstName);
+                    Helpers.Pause(1000);
+                    driver.FindElement(By.Id("LastName")).SendKeys(data.LastName);
+                    Helpers.Pause(1000);
+                    driver.FindElement(By.Id("FrequentFlyerNumber")).SendKeys(data.FrequentFlyerNumber);
+                    Helpers.Pause(1000);
+                    driver.FindElement(By.Id("Age")).SendKeys(data.Age.ToString());
+                    Helpers.Pause(1000);
+                    driver.FindElement(By.Id("GrossAnnualIncome")).SendKeys(data.GrossAnnualIncome.ToString());
+                    Helpers.Pause(1000);
+                    driver.FindElement(By.Id(data.Relationship)).Click();
+                    Helpers.Pause(1000);
+                    IWebElement businessSource = driver.FindElement(By.Id("BusinessSource"));
+                    SelectElement businessSourceSelect = new SelectElement(businessSource);
+                    businessSourceSelect.SelectByValue(data.BusinessSource);
+                    Helpers.Pause(1000);
+                    if (data.TermsAccepted == "Yes")
+                        driver.FindElement(By.Id("TermsAccepted")).Click();
+
+                    Helpers.Pause(1000);
+                    driver.FindElement(By.CssSelector("input[type='submit']")).Click();
+                    Helpers.Pause();
+
+                    if (data.Expected == "true")
+                    {
+                        Assert.Equal("Application Complete - Credit Cards", driver.Title);
+                    }
+                    else
+                    {
+                        var validationSummary = driver.FindElement(By.CssSelector(".validation-summary-errors ul li"));
+                        Assert.Equal(data.Expected, validationSummary.Text);
+                    }
+                }
+            }
+        }
 
     }
 }

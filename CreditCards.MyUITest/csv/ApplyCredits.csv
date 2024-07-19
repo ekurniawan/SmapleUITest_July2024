@@ -1,0 +1,5 @@
+﻿FirstName,LastName,FrequentFlyerNumber,Age,GrossAnnualIncome,Relationship,BusinessSource,TermsAccepted,Expected
+Erick,Kurniawan,123456-A,30,50000,Single,Email,Yes,true
+Scott,Guthrie,123456-B,25,75000,Married,Internet,No,You must accept the terms and conditions to continue
+Scott,Hanselman,234567-C,17,45000,Single,TV,Yes,You must be at least 18 years old
+
