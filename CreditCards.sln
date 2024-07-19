@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CreditCards.UITests", "Cred
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CreditCards.MyUITest", "CreditCards.MyUITest\CreditCards.MyUITest.csproj", "{C2F037ED-E892-4759-9BDB-D3AD6E977988}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreditCards.UnitTest", "CreditCards.UnitTest\CreditCards.UnitTest.csproj", "{CEDC367E-0633-4782-A394-3A6B2EB3BCE7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CreditCards.UnitTest", "CreditCards.UnitTest\CreditCards.UnitTest.csproj", "{CEDC367E-0633-4782-A394-3A6B2EB3BCE7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreditCards.APITest", "CreditCards.APITest\CreditCards.APITest.csproj", "{DEA3180E-1666-45ED-94BB-D5BD09010BC6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{CEDC367E-0633-4782-A394-3A6B2EB3BCE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CEDC367E-0633-4782-A394-3A6B2EB3BCE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CEDC367E-0633-4782-A394-3A6B2EB3BCE7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DEA3180E-1666-45ED-94BB-D5BD09010BC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DEA3180E-1666-45ED-94BB-D5BD09010BC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DEA3180E-1666-45ED-94BB-D5BD09010BC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DEA3180E-1666-45ED-94BB-D5BD09010BC6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
